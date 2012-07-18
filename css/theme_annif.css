@@ -1,0 +1,229 @@
+body {
+	background-color: #7873d9;
+	color: white;
+}
+
+h1 {
+	padding: 20px 0 0;
+	text-align: center;
+	color: white;
+	text-shadow: 10px 10px 10px black;
+}
+
+h2 {
+	color: white;
+}
+
+p {
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+
+.error { font-weight:bold; color: red; font-size: 120% }
+
+.ok { font-weight:bold; color: green; font-size: 120% }
+
+.right {
+	text-align: right;
+}
+
+.box {
+	-moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+	padding: 10px 0;
+	margin-bottom: 10px;
+}
+.box > * {
+	margin: 10px;
+}
+
+.pink {
+	background-color: #9c6ad6;
+}
+
+.box.pink {
+	min-height: 200px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+	background-image: url("/bg_logo_annif.png");
+}
+
+.violet {
+	background-color: #d862ca;
+	color: white;
+}
+
+.prio {
+	border: 0px;
+	white-space: nowrap;
+}
+
+.red {
+	background-color: red;
+}
+
+.nav {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.nav p {
+	margin: 0;
+}
+
+div.nav a {
+	margin: 0 0.5em;
+	font: bold 1em Arial;
+}
+
+a {
+	text-shadow: 2px 2px 2px #000;
+}
+
+.nav a{text-decoration: none}
+.nav a{color: #E1E8FF}
+.nav a:hover{color: #A1A8BF; text-decoration: underline;}
+
+a{text-decoration: none}
+a{color: #E1E8FF}
+a:hover{color: #A1A8BF; text-decoration: underline;}
+
+.gifts  td {
+	padding: 0.5em;
+	background-color: #852179;
+}
+
+.gifts  th {
+	padding: 0.5em;
+	background-color: #730065;
+	color: white;
+	border: 1;
+}
+
+.center {
+	text-align: center;
+}
+
+.tb{border:0px; max-width:132px; width:expression(this.width > 132 ? "150px" : this.width);
+	-moz-box-shadow: 0 0 5px black;
+	-webkit-box-shadow: 0 0 5px black;
+	box-shadow: 0 0 5px black;
+}
+.atb{margin: 4px 4px 4px 4px; line-height: 30px;}
+.tbp{border:0px; max-width:200px; width:expression(this.width > 200 ? "200px" : this.width);
+	-moz-box-shadow: 0 0 5px black;
+	-webkit-box-shadow: 0 0 5px black;
+	box-shadow: 0 0 5px black;
+}
+
+.atb img:hover {
+	-moz-box-shadow: 0 0 5px white;
+	-webkit-box-shadow: 0 0 5px white;
+	box-shadow: 0 0 5px white;
+}
+
+.comment h3{margin-left: 10px; margin-bottom: 10px}
+.comment {margin: 5px 10px;padding: 5px 0}
+.comment div{padding: 5px 10px}
+.comment p {margin-left: 15px; margin-bottom: 5px}
+
+div.user_icon  a {
+	display: block;
+}
+
+div.user_icon {
+	text-align: center;
+}
+
+/*typography*/
+/*
+body{font: 76% verdana,arial,sans-serif;text-align: center}
+h1,h2,h3,h4{font-family: "Trebuchet MS",arial,sans-serif}
+h1{text-align:center; font-size: 200%;}
+h2{font-size: 200%}
+h3{font-size: 160%}
+h4{font-size:110%;text-transform:uppercase;letter-spacing:1px;margin:0 5px}
+h2,p{margin: 0 15px;padding:0}
+p{padding-bottom: 0.7em;line-height: 1.5}
+a{text-decoration: none}
+address{padding: 3px 15px;font-style:normal}
+*/
+/*layout*/
+/*html{height: 100%; margin-bottom: 1px}
+html,body{margin:0;padding:0 0 20px}
+div#container{width: 650px;margin: 0 auto;text-align: left}
+div#header{margin:0 0 10px;padding: 0 0 5px;}
+div#header h1{margin:0 5px;padding:3px 0px 60px 0px}
+div#header a{margin-left: 10px}
+*/
+
+/*div#nav{float: right;width: 150px}*/
+/*
+div#nav div{padding: 5px 0;margin-bottom: 5px}
+div#nav div#menu{margin: 0 5px}
+div#nav ul,div#nav li{margin:0;padding:0;list-style-type:none;line-height: 1.5}
+div#nav a{margin-left:5px;padding-left:10px}
+div#nav p{margin: 0 5px;padding:0}
+div#nav p+p{margin-top: 0.7em}
+*/
+/*
+form {margin: 5px 10px;padding: 5px 0}
+form h3{margin-left: 10px; margin-bottom: 10px}
+form div{padding: 5px 10px}
+form input{margin-left:10px}
+.comment {margin: 5px 10px;padding: 5px 0}
+.comment h3{margin-left: 10px; margin-bottom: 10px}
+.comment div{padding: 5px 10px}
+div#content{width:495px;padding:5px 0}
+blockquote{float:left;display:inline;width: 200px;margin: 0 10px 5px 15px;padding: 5px 0}
+blockquote p{margin:0;padding: 0 5px;text-align: center}
+div#footer{clear: right;margin-top: 10px}
+div#content p{margin: 0 10px;padding-bottom:5px}
+.tb{border:0px; max-width:150px; width:expression(this.width > 150 ? "150px" : this.width);}
+.atb{margin: 4px 4px 4px 4px; line-height: 30px;}
+.tbp{border:0px; max-width:440px; width:expression(this.width > 440 ? "440px" : this.width);}
+
+table {margin: 10px 10px; font-size:100%}
+td {padding: 5px 5px 5px 5px}
+
+table#navkdo {width:96%}
+table#navkdo td {width:33%; font-weight: bold;}
+.al {text-align:left}
+.ac {text-align:center}
+.ar {text-align:right}
+.small {font-size:85%}
+.nw{white-space: nowrap}
+
+li {padding-bottom: 5px}
+select, textarea, input {margin: 1px 0 0 0px; border: 1px solid #0032FF}
+*/
+/*colors*/
+/*th, td{color: white}
+body{background: #366AFC}
+div#header{background: #0032FF}
+.header h1 { background-image:
+               url('images/logo_annif.jpg');
+               background-repeat: no-repeat; background-attachment: scroll;
+               background-position: 0% }
+h1 {color: #94232D}
+h2{color: white}
+h3{color: #94232D}
+h4{color: #366AFC}
+a{color: #E1E8FF}
+a:hover{color: #A1A8BF}
+select, textarea, input{color: #0032FF}
+div{color: #E1E8FF}
+div#nav{background: #721A32}
+div#sidenotes{background:#E23459}
+div#content{background: #E23459}
+div#footer{background: #CCC;color: #333}
+*/
+/*tr{background: #9F0005;}*/
+/*
+tr{background: #721A32;}
+form{background: #721A32}
+.comment{background: #721A32}
+select, textarea, input{background: #E1E8FF}
+blockquote{background: #E23459}
+*/

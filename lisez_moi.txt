@@ -1,0 +1,21 @@
+Juste quelques notes pour les dev:
+
+- Tous les fichiers en UTF-8 (attention pour les accents)
+
+- Les pages web qui servent juste a faire un traitement et rediriger (aucun output) commencent par r_ (comme rediriger/redirect)
+
+- $_SESSION['back'] contient l'url de la page précedente, utilisez surtour dans une page r_ pour revenir la ou on était avant l'action
+
+- Les pages web qui ne contiennent que des fonctions commencent par i_ (comme include ou inclusion)
+
+- i_sql.php contient toutes les fonctions liées a la base de donnée
+
+- i_divers.php contient des fonctions qui affichent des choses generiques (menu, entete, ...) et qui verifie si l'utilisateur est bien identifié
+
+- Tous les fichiers sont en minuscule avec des _ pour separateur
+
+- Utiliser les sessions QUE pour idUtilisateur et les messages d'erreur
+
+- Le nom des tables et des champs dans les requetes sont en caisse *sensitive* donc attention a bien les orthographier
+
+- Pour acceder aux variables de post et de get, il faut utiliser get_param('var')
