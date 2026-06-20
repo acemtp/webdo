@@ -57,7 +57,10 @@ function sql_normalize_query($requete) {
 		'/SUBDATE\(NOW\(\), \'([0-9]+) days\'\)/i' => "datetime('now', '-$1 days')",
 	);
 
-	return preg_replace(array_keys($patterns), array_values($patterns), $requete);
+	$requete = preg_replace(array_keys($patterns), array_values($patterns), $requete);
+	$requete = str_replace("\\'", "''", $requete);
+	$requete = str_replace('\\"', '""', $requete);
+	return $requete;
 }
 
 function sql_update($requete) {
@@ -95,6 +98,11 @@ function sql_select($requete, &$nblignes) {
 	} catch (PDOException $e) {
 		die("La requete sur la base a échoué : ".$requete." (".$e->getMessage().")");
 	}
+}
+
+function sql_escape($value) {
+	$pdo = sql_get_connection();
+	return substr($pdo->quote($value), 1, -1);
 }
 
 // retourne le prenom d'un id utilisateur

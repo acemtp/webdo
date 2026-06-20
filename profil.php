@@ -12,8 +12,8 @@ require_once('i_divers.php');
 
 verifieUtilisateur();
 
-$id = get_param('id');
-if($id == '') $id = $_SESSION['idUtilisateur'];
+$id = get_param_int('id');
+if($id <= 0) $id = $_SESSION['idUtilisateur'];
 
 $view = get_param('view');
 
@@ -52,7 +52,7 @@ echo '</h2>';
 display_form_error('general');
 
 if($photo!="") {
-	echo '<p class="center"><img class="tbp" src="photo/'.$photo.'"/></p>';
+	echo '<p class="center"><img class="tbp" src="photo/'.h($photo).'"/></p>';
 	if($edit) echo '<p><a href="r_supprime_photo.php">Retirer la photo</a></p>';
 }
 if ($edit) {
@@ -62,7 +62,7 @@ if ($edit) {
 
 if ($edit) {
 	display_form_error('prenom');
-	echo '<p>Prénom : <input type="text" name="prenom" size="30" value="'.$prenom.'" />';
+	echo '<p>Prénom : <input type="text" name="prenom" size="30" value="'.h($prenom).'" />';
 } else { 
 	echo '<p>Prénom : '.$prenom;
 }
@@ -70,13 +70,13 @@ echo '</p>';
 
 if ($edit) {
 	display_form_error('motPasse');
-	echo '<p>Mot de passe : <input type="text" size="30" name="motPasse" value="'.$motPasse.'" /> (Les mots de passe ne sont pas cryptés, mettez en un qui ne risque rien)</p>';
+	echo '<p>Mot de passe : <input type="text" size="30" name="motPasse" value="'.h($motPasse).'" /> (Les mots de passe ne sont pas cryptés, mettez en un qui ne risque rien)</p>';
 }
 
 if ($edit) {
 	display_form_error('anniversaire');
 	echo '<p>Date d\'anniversaire (jj/mm/aaaa) : ';
-	echo '<input type="text" name="anniversaire" size="10" value="'.$anniversaire[2].'/'.$anniversaire[1]."/".$anniversaire[0].'" />';
+	echo '<input type="text" name="anniversaire" size="10" value="'.h($anniversaire[2].'/'.$anniversaire[1]."/".$anniversaire[0]).'" />';
 } else { 
 	echo '<p>Date d\'anniversaire : '.$anniversaire[2]."/".$anniversaire[1]."/".$anniversaire[0];
 }
@@ -84,16 +84,16 @@ echo '</p>';
 
 echo '<p>Email : ';
 if ($edit) {
-	echo '<input type="text" name="email" size="50" value="'.$email.'" />';
+	echo '<input type="text" name="email" size="50" value="'.h($email).'" />';
 } else { 
-	echo "<a href=\"mailto:$email\">$email</a>";
+	echo '<a href="'.safe_url('mailto:'.$email).'">'.h($email).'</a>';
 } 
 echo '</p>';
 
 if ($edit) {
 	display_form_error('presentation');
 	echo '<p>Présentation :<br/>';
-	echo '<textarea name="presentation" cols="100" rows="10">'.$presentation.'</textarea>';
+	echo '<textarea name="presentation" cols="100" rows="10">'.h($presentation).'</textarea>';
 } else {
 	echo '<p>Présentation : '.embellir($presentation);
 }
@@ -102,7 +102,7 @@ echo '</p>';
 if ($edit) {
 	display_form_error('aime');
 	echo '<p>Aime :<br/>';
-	echo '<textarea name="aime" cols="100" rows="10">'.$aime.'</textarea>';
+	echo '<textarea name="aime" cols="100" rows="10">'.h($aime).'</textarea>';
 } else {
 	echo '<p><table class="gifts">';
 	echo '<tr><th><img src="images/happy.png"/>  Aime</th></tr>';
@@ -114,7 +114,7 @@ echo '</p>';
 if ($edit) {
 	display_form_error('aimepas');
 	echo '<p>Aime pas :<br/>';
-	echo '<textarea name="aimepas" cols="100" rows="10">'.$aimepas.'</textarea>';
+	echo '<textarea name="aimepas" cols="100" rows="10">'.h($aimepas).'</textarea>';
 } else {
 	echo '<p><table class="gifts">';
 	echo '<tr><th><img src="images/unhappy.png"/> Aime pas</th></tr>';

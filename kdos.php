@@ -12,19 +12,28 @@ verifieUtilisateur();
 $res = sql_select('select id from groupe where idMembre='.$_SESSION['idUtilisateur'], $nbRep);
 $membres = array();
 
-for ($i = 0; $i < $nbRep; $i++) {
-	// pour chaque groupe
-	$group=$res[$i]['id'];
-
-	// on recherche les infos sur les utilisateurs du groupe sauf l'utilisateur en cours
-	$resMb = sql_select("select m.id, m.prenom, m.photo from membre m, groupe g where m.id=g.idMembre and g.id=$group order by m.prenom", $nb_tmp);
-
-	// mémorisation des infos du membre de ce groupe
+if ($nbRep == 0) {
+	$resMb = sql_select("select id, prenom, photo from membre where id != ".$_SESSION['idUtilisateur']." order by prenom", $nb_tmp);
 	for ($j = 0; $j < $nb_tmp; $j++) {
 		$id = $resMb[$j]["id"];
-		if (! isset($membres[$id])) {
-			$membres[$id]["prenom"] = $resMb[$j]["prenom"];
-			$membres[$id]["photo"] = $resMb[$j]["photo"];
+		$membres[$id]["prenom"] = $resMb[$j]["prenom"];
+		$membres[$id]["photo"] = $resMb[$j]["photo"];
+	}
+} else {
+	for ($i = 0; $i < $nbRep; $i++) {
+		// pour chaque groupe
+		$group=$res[$i]['id'];
+
+		// on recherche les infos sur les utilisateurs du groupe sauf l'utilisateur en cours
+		$resMb = sql_select("select m.id, m.prenom, m.photo from membre m, groupe g where m.id=g.idMembre and g.id=$group and m.id != ".$_SESSION['idUtilisateur']." order by m.prenom", $nb_tmp);
+
+		// mémorisation des infos du membre de ce groupe
+		for ($j = 0; $j < $nb_tmp; $j++) {
+			$id = $resMb[$j]["id"];
+			if (! isset($membres[$id])) {
+				$membres[$id]["prenom"] = $resMb[$j]["prenom"];
+				$membres[$id]["photo"] = $resMb[$j]["photo"];
+			}
 		}
 	}
 }

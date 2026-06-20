@@ -14,8 +14,8 @@ require_once('i_commentaire.php');
 
 verifieUtilisateur();
 
-$id = get_param('id');
-$view = get_param('view') == 1;
+$id = get_param_int('id');
+$view = get_param_int('view') == 1;
 
 $res = sql_select("select * from kdo where id = ".$id, $nbRep);
 if ($nbRep != 1) die("oups un problème avec ce cadeau ? <a href=les_kdos.php>Clique ici<a>");
@@ -54,7 +54,7 @@ aff_header();
 
 echo '<div class="box pink">';
 
-echo '<h2>'.$titre.' pour '.prenom($pour).'</h2>';
+echo '<h2>'.h($titre).' pour '.h(prenom($pour)).'</h2>';
 
 display_form_error('general');
 
@@ -64,7 +64,7 @@ if($edit)
 	echo '<input type="hidden" name="id" value="'.$id.'" />';
 }
 
-if ($image) { echo '<p class="center"><img class="tbp" src="'.$image.'"></p>'; }
+if ($image) { $safeImage = safe_url($image); if($safeImage != '') echo '<p class="center"><img class="tbp" src="'.$safeImage.'"></p>'; }
 
 echo '<br/>';
 
@@ -80,24 +80,25 @@ echo '</p>';
 
 if($edit) {
 	display_form_error('titre');
-	echo '<p>Titre : <input type="text" size="100" name="titre" value="'.htmlentities ($titre, ENT_QUOTES, "UTF-8").'" /></p>';
+	echo '<p>Titre : <input type="text" size="100" name="titre" value="'.h($titre).'" /></p>';
 }
 
 if($edit) {
 	display_form_error('url');
-	echo '<p>Lien : <input type="text" size="100" name="url" value="'.$url.'" /></p>';
+	echo '<p>Lien : <input type="text" size="100" name="url" value="'.h($url).'" /></p>';
 } else {
 	if(strlen($url) > 50) {
 		$urld = substr($url, 0, 50)."...";
 	} else {
 		$urld = $url;
 	}
-	echo "<p>Lien: <a target=\"_blank\" href=\"$url\">$urld</a></p>";
+		$safeGiftUrl = safe_url($url);
+		if($safeGiftUrl != '') echo '<p>Lien: <a target="_blank" href="'.$safeGiftUrl.'">'.h($urld).'</a></p>';
 }
 
 if($edit) {
 	display_form_error('image');
-	echo '<p>Image : <input type="text" size="100" name="image" value="'.$image.'" /></p>';
+	echo '<p>Image : <input type="text" size="100" name="image" value="'.h($image).'" /></p>';
 }
 
 echo "Priorité : ";
@@ -105,7 +106,7 @@ aff_priorite($edit, $prio);
 
 if($edit) {
 	display_form_error('description');
-	echo '<p>Détails :<br/><textarea name="description" cols="100" rows="20">'.$description.'</textarea></p>';
+	echo '<p>Détails :<br/><textarea name="description" cols="100" rows="20">'.h($description).'</textarea></p>';
 } else {
 //	echo "<p>Détails : <br/></br><b>".embellir($description)."</b></p>";
 

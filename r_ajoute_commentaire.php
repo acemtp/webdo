@@ -19,17 +19,18 @@ require_once('i_divers.php');
 
 verifieUtilisateur();
 
-$id = get_param('id');
-$pour = get_param('pour');
+$id = get_param_int('id');
+$pour = get_param_int('pour');
 $commentaire = get_param('commentaire');
-$visible = get_param('visible');
+$visible = get_param_int('visible');
 
 if ($commentaire == "") {
 	header('Location: '.$_SESSION['back']);
 	exit();
 }
 
-sql_insert("insert into commentaire (idKdo, commentaire, visible, creeLe, creePar) values (".$id.", \"".$commentaire."\", ".$visible.", \"".date('Y-m-d G:i:s')."\", ".$_SESSION['idUtilisateur'].")");
+$commentaire = sql_escape($commentaire);
+sql_insert("insert into commentaire (idKdo, commentaire, visible, creeLe, creePar) values (".$id.", '".$commentaire."', ".$visible.", '".date('Y-m-d G:i:s')."', ".$_SESSION['idUtilisateur'].")");
 
 $res = sql_select("select creePar from kdo where id=".$id, $nbl);
 $creePar = $res[0]['creePar'];

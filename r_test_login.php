@@ -34,6 +34,8 @@ if (!$ok) {
 	exit();
 }
 
+$login = sql_escape($login);
+$pwd = sql_escape($pwd);
 $res = sql_select("select * from membre where prenom = '$login' and motPasse = '$pwd'", $nbRep);
 if ($nbRep == 1) {
 	$_SESSION['idUtilisateur'] = $res[0]['id'];

@@ -5,11 +5,35 @@ require_once('i_divers.php');
 verifieAdmin();
 
 $action = get_param('action');
-$id = intval(get_param('id'));
+$id = get_param_int('id');
 $prenom = trim(get_param('prenom'));
 $motPasse = trim(get_param('motPasse'));
 $email = trim(get_param('email'));
 $ok = true;
+
+function get_group_member_ids() {
+	$membres = array();
+	if(isset($_POST['group_members']) && is_array($_POST['group_members'])) {
+		foreach($_POST['group_members'] as $idMembre) {
+			$idMembre = intval($idMembre);
+			if($idMembre > 0) $membres[$idMembre] = $idMembre;
+		}
+	}
+	return array_values($membres);
+}
+
+function validate_group_data($nom, $membres) {
+	$ok = true;
+	if($nom == '') {
+		$ok = false;
+		set_form_error('group_nom', 'Le nom du groupe est obligatoire.');
+	}
+	if(count($membres) == 0) {
+		$ok = false;
+		set_form_error('group_membres', 'Choisis au moins un membre.');
+	}
+	return $ok;
+}
 
 if($action == 'add') {
 	if($prenom == '') {
@@ -28,6 +52,9 @@ if($action == 'add') {
 	}
 
 	if($ok) {
+		$prenom = sql_escape($prenom);
+		$motPasse = sql_escape($motPasse);
+		$email = sql_escape($email);
 		sql_insert("insert into membre (prenom, motPasse, email, aime, aimepas) values ('$prenom', '$motPasse', '$email', '', '')");
 		set_form_error('general', 'La personne a été ajoutée.');
 	}
@@ -43,6 +70,7 @@ elseif($action == 'update_password') {
 	}
 
 	if($ok) {
+		$motPasse = sql_escape($motPasse);
 		sql_update("update membre set motPasse='$motPasse' where id=$id");
 		set_form_error('general', 'Le mot de passe a été modifié.');
 	}
@@ -74,6 +102,54 @@ elseif($action == 'delete') {
 		sql_update("update kdo set creePar=".$_SESSION['idUtilisateur']." where creePar=$id");
 		sql_update("update kdo set pour=".$_SESSION['idUtilisateur']." where pour=$id");
 		set_form_error('general', 'La personne a été retirée.');
+	}
+}
+elseif($action == 'create_group') {
+	$groupNom = trim(get_param('group_nom'));
+	$groupMembers = get_group_member_ids();
+	$ok = validate_group_data($groupNom, $groupMembers);
+
+	if($ok) {
+		$resGroup = sql_select('select max(id) as maxId from groupe', $nbRep);
+		$groupId = intval($resGroup[0]['maxId']) + 1;
+		$groupNom = sql_escape($groupNom);
+		foreach($groupMembers as $groupMemberId) {
+			sql_insert("insert into groupe (id, idMembre, nom) values ($groupId, $groupMemberId, '$groupNom')");
+		}
+		set_form_error('general', 'Le groupe a été créé.');
+	}
+}
+elseif($action == 'update_group') {
+	$groupId = get_param_int('group_id');
+	$groupNom = trim(get_param('group_nom'));
+	$groupMembers = get_group_member_ids();
+
+	if($groupId <= 0) {
+		$ok = false;
+		set_form_error('general', 'Groupe invalide.');
+	} else {
+		$ok = validate_group_data($groupNom, $groupMembers);
+	}
+
+	if($ok) {
+		$groupNom = sql_escape($groupNom);
+		sql_update("delete from groupe where id=$groupId");
+		foreach($groupMembers as $groupMemberId) {
+			sql_insert("insert into groupe (id, idMembre, nom) values ($groupId, $groupMemberId, '$groupNom')");
+		}
+		set_form_error('general', 'Le groupe a été mis à jour.');
+	}
+}
+elseif($action == 'delete_group') {
+	$groupId = get_param_int('group_id');
+	if($groupId <= 0) {
+		$ok = false;
+		set_form_error('general', 'Groupe invalide.');
+	}
+
+	if($ok) {
+		sql_update("delete from groupe where id=$groupId");
+		set_form_error('general', 'Le groupe a été supprimé.');
 	}
 }
 else {

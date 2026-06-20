@@ -61,6 +61,13 @@ if(is_uploaded_file($_FILES['photo']['tmp_name'])) {
 }
 
 if ($ok) {
+	$prenom = sql_escape($prenom);
+	$motPasse = sql_escape($motPasse);
+	$anniversaire = sql_escape($anniversaire);
+	$presentation = sql_escape($presentation);
+	$email = sql_escape($email);
+	$aime = sql_escape($aime);
+	$aimepas = sql_escape($aimepas);
 	$req = "update membre set prenom='$prenom', motPasse='$motPasse', anniversaire='$anniversaire', presentation='$presentation', email='$email', aime='$aime', aimepas='$aimepas'";
 	if(isset($upfile) && $upfile != "") {
 		$req .= ",photo=\"".$upfile."\"";

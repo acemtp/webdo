@@ -217,11 +217,31 @@ function get_param($key) {
 	return addslashes($value);
 }
 
+function get_param_int($key) {
+	if(isset($_GET[$key])) $value = $_GET[$key];
+	else if(isset($_POST[$key])) $value = $_POST[$key];
+	else $value = 0;
+	return intval($value);
+}
+
+function h($value) {
+	return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+}
+
+function safe_url($url) {
+	$url = trim((string)$url);
+	if($url === '') return '';
+	if(!preg_match('/^https?:\/\//i', $url) && !preg_match('/^mailto:/i', $url)) {
+		return '';
+	}
+	return h($url);
+}
+
 function display_form_error($field)
 {
 	if(isset($_SESSION[$field.'ERR']))
 	{
-		echo '<div class="error">'.$_SESSION[$field.'ERR'].'</div>';
+		echo '<div class="error">'.h($_SESSION[$field.'ERR']).'</div>';
 	}
 }
 
