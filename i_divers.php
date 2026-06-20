@@ -61,6 +61,7 @@ function aff_header() {
             </ul>
             <ul class="nav pull-right">
 			<li><a href="">Je suis "<?= prenom_simple($_SESSION['idUtilisateur']) ?>"</a></li>
+			<? if(est_admin()) { ?><li><a href="admin.php">Admin</a></li><? } ?>
 			<li><a href="profil.php">Mon profil</a></li>
 			<li><a href="logout.php">Deconnexion</a></li>
             </ul>
@@ -134,6 +135,23 @@ function verifieUtilisateur() {
 	}
 }
 
+function est_admin() {
+	if(!isset($_SESSION['idUtilisateur'])) {
+		return false;
+	}
+
+	$res = sql_select("select admin from membre where id=".$_SESSION['idUtilisateur'], $nbRep);
+	return $nbRep == 1 && intval($res[0]['admin']) == 1;
+}
+
+function verifieAdmin() {
+	verifieUtilisateur();
+	if(!est_admin()) {
+		header("Location: home.php");
+		exit;
+	}
+}
+
 function aff_priorite($edit, $prio) {
 	$prio_text = array('Doit avoir', 'Adorerais avoir', 'Aimerais avoir', 'J\'y pense', 'Suggestion');
 	if($edit) {
@@ -186,8 +204,8 @@ function aff_groupe($id, $edit, $value) {
 // prend un texte tapp� au kilometre et le rend beau pour le browser
 // remplace les \n en <br/>, remplace les url par un lien
 function embellir($desc) {
-	$desc = @ereg_replace("(\n|\r|^| )([a-zA-Z]+://[.a-zA-Z0-9_/?&%=-]{0,40})([.a-zA-Z0-9_/?&%=-]*)", "\\1<a target=\"_blank\" href=\"\\2\\3\">\\2</a>", $desc);
-	$desc = @ereg_replace("(\n|\r|^| )(www.[.a-zA-Z0-9_/?&%=-]{0,50})([.a-zA-Z0-9_/?&%=-]*)", "\\1<a target=\"_blank\" href=\"http://\\2\\3\">\\2</a>", $desc);
+	$desc = preg_replace('/(\n|\r|^| )([a-zA-Z]+:\/\/[.a-zA-Z0-9_\/?&%=-]{0,40})([.a-zA-Z0-9_\/?&%=-]*)/', '\\1<a target="_blank" href="\\2\\3">\\2</a>', $desc);
+	$desc = preg_replace('/(\n|\r|^| )(www\.[.a-zA-Z0-9_\/?&%=-]{0,50})([.a-zA-Z0-9_\/?&%=-]*)/', '\\1<a target="_blank" href="http://\\2\\3">\\2</a>', $desc);
 	$desc = nl2br($desc);
 	return $desc;
 }

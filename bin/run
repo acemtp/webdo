@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+HOST="${HOST:-127.0.0.1}"
+PORT="${PORT:-8000}"
+DB_PATH="${DB_PATH:-$ROOT_DIR/var/webdo.sqlite}"
+SCHEMA_PATH="$ROOT_DIR/sql/create_sqlite.sql"
+
+cd "$ROOT_DIR"
+
+mkdir -p "$(dirname "$DB_PATH")"
+
+if [ ! -f "$DB_PATH" ]; then
+  echo "Initializing SQLite database at $DB_PATH"
+  php -r '
+    $dbPath = $argv[1];
+    $schemaPath = $argv[2];
+    $pdo = new PDO("sqlite:$dbPath");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $schema = file_get_contents($schemaPath);
+    if ($schema === false) {
+        fwrite(STDERR, "Unable to read schema file\n");
+        exit(1);
+    }
+    $pdo->exec($schema);
+  ' "$DB_PATH" "$SCHEMA_PATH"
+fi
+
+echo "Starting PHP dev server on http://$HOST:$PORT"
+echo "Project root: $ROOT_DIR"
+echo "SQLite database: $DB_PATH"
+
+exec php -d short_open_tag=1 -S "$HOST:$PORT" -t "$ROOT_DIR"

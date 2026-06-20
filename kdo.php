@@ -30,9 +30,21 @@ $reservePar = $res[0]["reservePar"];
 $achetePar = $res[0]["achetePar"];
 $partage = $res[0]["partage"];
 $supprime = $res[0]["supprime"];
-$creeLe = explode("-",$res[0]["creeLe"]);
-$reserveLe = explode("-",$res[0]["reserveLe"]);
-$acheteLe = explode("-",$res[0]["acheteLe"]);
+$creeLe = explode("-", $res[0]["creeLe"]);
+$reserveLe = array('', '', '');
+if($res[0]["reserveLe"] != '') {
+	$reserveLeParts = explode("-", $res[0]["reserveLe"]);
+	if(count($reserveLeParts) == 3) {
+		$reserveLe = $reserveLeParts;
+	}
+}
+$acheteLe = array('', '', '');
+if($res[0]["acheteLe"] != '') {
+	$acheteLeParts = explode("-", $res[0]["acheteLe"]);
+	if(count($acheteLeParts) == 3) {
+		$acheteLe = $acheteLeParts;
+	}
+}
 $prio = $res[0]["priorite"];
 
 $edit = $creePar == $_SESSION['idUtilisateur'] && !$view;

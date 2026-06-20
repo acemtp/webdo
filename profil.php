@@ -26,7 +26,13 @@ if ($nbRep != 1) {
 
 $motPasse = $res[0]["motPasse"];
 $prenom = $res[0]["prenom"];
-$anniversaire = explode("-",$res[0]["anniversaire"]);
+$anniversaire = array('', '', '');
+if($res[0]["anniversaire"] != '') {
+	$anniversaire_parts = explode("-", $res[0]["anniversaire"]);
+	if(count($anniversaire_parts) == 3) {
+		$anniversaire = $anniversaire_parts;
+	}
+}
 $presentation = $res[0]["presentation"];
 $email = $res[0]["email"];
 $photo = $res[0]["photo"];

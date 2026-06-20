@@ -2,36 +2,99 @@
 
 require_once('i_config.php');
 
+function sql_get_connection() {
+	static $pdo = null;
+
+	if ($pdo !== null) {
+		return $pdo;
+	}
+
+	global $dbpath;
+
+	if (!isset($dbpath) || $dbpath === '') {
+		die("La configuration SQLite est invalide !");
+	}
+
+	$dbdir = dirname($dbpath);
+	if (!is_dir($dbdir) && !mkdir($dbdir, 0777, true) && !is_dir($dbdir)) {
+		die("Impossible de créer le dossier de la base SQLite !");
+	}
+
+	try {
+		$pdo = new PDO('sqlite:'.$dbpath);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+		$pdo->exec('PRAGMA foreign_keys = ON');
+		sql_run_migrations($pdo);
+	} catch (PDOException $e) {
+		die("La connexion a échoué ! ".$e->getMessage());
+	}
+
+	return $pdo;
+}
+
+function sql_run_migrations($pdo) {
+	$columns = $pdo->query("PRAGMA table_info(membre)")->fetchAll();
+	$hasAdmin = false;
+
+	foreach($columns as $column) {
+		if(isset($column['name']) && $column['name'] == 'admin') {
+			$hasAdmin = true;
+			break;
+		}
+	}
+
+	if(!$hasAdmin) {
+		$pdo->exec("ALTER TABLE membre ADD COLUMN admin INTEGER NOT NULL DEFAULT 0");
+	}
+
+	$pdo->exec("UPDATE membre SET admin = 1 WHERE id = 1");
+}
+
+function sql_normalize_query($requete) {
+	$patterns = array(
+		'/SUBDATE\(NOW\(\), "([0-9]+) days"\)/i' => "datetime('now', '-$1 days')",
+		'/SUBDATE\(NOW\(\), \'([0-9]+) days\'\)/i' => "datetime('now', '-$1 days')",
+	);
+
+	return preg_replace(array_keys($patterns), array_values($patterns), $requete);
+}
+
 function sql_update($requete) {
-	global $dbhost, $dblogin, $dbpass, $dbname;
-	$id_connexion = mysql_connect($dbhost, $dblogin, $dbpass) or die("La connexion a échoué ! ".mysql_error());
-	mysql_select_db($dbname, $id_connexion) or die("La selection de la base a échoué ! ".mysql_error());
-	$id_requete = mysql_query($requete, $id_connexion) or die("La requete sur la base a échoué : ".$requete);
-	mysql_close($id_connexion);
+	$pdo = sql_get_connection();
+	$requete = sql_normalize_query($requete);
+
+	try {
+		$pdo->exec($requete);
+	} catch (PDOException $e) {
+		die("La requete sur la base a échoué : ".$requete." (".$e->getMessage().")");
+	}
 }
 
 function sql_insert($requete) {
-	global $dbhost, $dblogin, $dbpass, $dbname;
-	$id_connexion = mysql_connect($dbhost, $dblogin, $dbpass) or die("La connexion a échoué ! ".mysql_error());
-	mysql_select_db($dbname, $id_connexion) or die("La selection de la base a échoué ! ".mysql_error());
-	$id_requete = mysql_query($requete, $id_connexion) or die("La requete sur la base a échoué : ".$requete);
-	$id = mysql_insert_id();
-	mysql_close($id_connexion);
-	return $id;
+	$pdo = sql_get_connection();
+	$requete = sql_normalize_query($requete);
+
+	try {
+		$pdo->exec($requete);
+		return intval($pdo->lastInsertId());
+	} catch (PDOException $e) {
+		die("La requete sur la base a échoué : ".$requete." (".$e->getMessage().")");
+	}
 }
 
 function sql_select($requete, &$nblignes) {
-	global $dbhost, $dblogin, $dbpass, $dbname;
-	$id_connexion = mysql_connect($dbhost, $dblogin, $dbpass) or die("La connexion a échoué ! ".mysql_error());
-	mysql_select_db($dbname, $id_connexion) or die("La selection de la base a échoué ! ".mysql_error());
-	$id_requete = mysql_query($requete, $id_connexion) or die("La requete sur la base a échoué : ".$requete);
-	$nblignes = mysql_num_rows($id_requete);
-	$res = array();
-	for($i = 0; $i < $nblignes; $i++) {
-		$res[$i] = mysql_fetch_assoc($id_requete);
+	$pdo = sql_get_connection();
+	$requete = sql_normalize_query($requete);
+
+	try {
+		$statement = $pdo->query($requete);
+		$res = $statement->fetchAll();
+		$nblignes = count($res);
+		return $res;
+	} catch (PDOException $e) {
+		die("La requete sur la base a échoué : ".$requete." (".$e->getMessage().")");
 	}
-	mysql_close($id_connexion);
-	return $res;
 }
 
 // retourne le prenom d'un id utilisateur

@@ -9,15 +9,15 @@ require_once('i_divers.php');
 
 verifieUtilisateur();
 
-if ($_SESSION['idUtilisateur']=='1')
-	$toi = "mamounette";
-elseif ($_SESSION['idUtilisateur']=='3')
-	$toi = "mon lapin";
-elseif ($_SESSION['idUtilisateur']=='2'||$_SESSION['idUtilisateur']=='5'||$_SESSION['idUtilisateur']=='6'||$_SESSION['idUtilisateur']=='8')
-	$toi = "ma puce";
-elseif ($_SESSION['idUtilisateur']=='4'||$_SESSION['idUtilisateur']=='7')
-	$toi = "mon lapin";
-else
+// if ($_SESSION['idUtilisateur']=='1')
+// 	$toi = "mamounette";
+// elseif ($_SESSION['idUtilisateur']=='3')
+// 	$toi = "mon lapin";
+// elseif ($_SESSION['idUtilisateur']=='2'||$_SESSION['idUtilisateur']=='5'||$_SESSION['idUtilisateur']=='6'||$_SESSION['idUtilisateur']=='8')
+// 	$toi = "ma puce";
+// elseif ($_SESSION['idUtilisateur']=='4'||$_SESSION['idUtilisateur']=='7')
+// 	$toi = "mon lapin";
+// else
 	$toi = prenom($_SESSION['idUtilisateur']);
 
 aff_header();
