@@ -31,5 +31,6 @@ fi
 echo "Starting PHP dev server on http://$HOST:$PORT"
 echo "Project root: $ROOT_DIR"
 echo "SQLite database: $DB_PATH"
+echo "PHP source directory: $ROOT_DIR/src"
 
-exec php -d short_open_tag=1 -S "$HOST:$PORT" -t "$ROOT_DIR"
+exec php -d short_open_tag=1 -S "$HOST:$PORT" -t "$ROOT_DIR" "$ROOT_DIR/router.php"

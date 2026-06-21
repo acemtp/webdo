@@ -1,0 +1,3 @@
+/var/webdo.sqlite
+/photo/*
+!/photo/.gitkeep
