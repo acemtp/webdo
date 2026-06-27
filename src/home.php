@@ -183,14 +183,16 @@ echo '<div class="dashboard-chart-card">';
 echo '<span class="dashboard-chart-title">Activite sur 7 jours</span>';
 echo '<div class="dashboard-bars">';
 foreach($days as $day) {
-	$createHeight = max(10, intval(round(($day['creates'] / $maxActivity) * 100)));
-	$resaHeight = max(10, intval(round(($day['reservations'] / $maxActivity) * 100)));
-	$buyHeight = max(10, intval(round(($day['purchases'] / $maxActivity) * 100)));
+	$createHeight = $day['creates'] > 0 ? max(8, intval(round(($day['creates'] / $maxActivity) * 100))) : 0;
+	$resaHeight = $day['reservations'] > 0 ? max(8, intval(round(($day['reservations'] / $maxActivity) * 100))) : 0;
+	$buyHeight = $day['purchases'] > 0 ? max(8, intval(round(($day['purchases'] / $maxActivity) * 100))) : 0;
 	echo '<div class="dashboard-bar-col">';
 	echo '<span class="dashboard-bar-value">'.$day['creates'].' / '.$day['reservations'].' / '.$day['purchases'].'</span>';
-	echo '<div class="dashboard-bar-track"><span class="dashboard-bar creates" style="height: '.$createHeight.'%;"></span></div>';
-	echo '<div class="dashboard-bar-track"><span class="dashboard-bar reservations" style="height: '.$resaHeight.'%;"></span></div>';
-	echo '<div class="dashboard-bar-track"><span class="dashboard-bar purchases" style="height: '.$buyHeight.'%;"></span></div>';
+	echo '<div class="dashboard-bar-track">';
+	if($buyHeight > 0) echo '<span class="dashboard-bar purchases" style="height: '.$buyHeight.'%;"></span>';
+	if($resaHeight > 0) echo '<span class="dashboard-bar reservations" style="height: '.$resaHeight.'%;"></span>';
+	if($createHeight > 0) echo '<span class="dashboard-bar creates" style="height: '.$createHeight.'%;"></span>';
+	echo '</div>';
 	echo '<span class="dashboard-bar-label">'.$day['label'].'</span>';
 	echo '</div>';
 }

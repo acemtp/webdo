@@ -533,7 +533,8 @@ function aff_header() {
 		display: grid;
 		gap: 14px;
 		grid-template-columns: repeat(7, minmax(0, 1fr));
-		height: 200px;
+		height: 190px;
+		overflow: hidden;
 	}
 	 .dashboard-bar-col {
 		align-items: center;
@@ -542,18 +543,23 @@ function aff_header() {
 		gap: 8px;
 		height: 100%;
 		justify-content: flex-end;
+		min-width: 0;
 	}
 	 .dashboard-bar-value {
 		color: var(--ink-soft);
-		font-size: 13px;
+		font-size: 11px;
 		font-weight: 800;
+		line-height: 1.2;
+		text-align: center;
 	}
 	 .dashboard-bar-track {
 		align-items: end;
 		background: rgba(116, 78, 68, 0.08);
 		border-radius: 18px;
 		display: flex;
-		height: 150px;
+		flex-direction: column-reverse;
+		height: 120px;
+		justify-content: flex-start;
 		overflow: hidden;
 		padding: 6px;
 		width: 100%;
@@ -561,6 +567,8 @@ function aff_header() {
 	 .dashboard-bar {
 		border-radius: 14px;
 		display: block;
+		margin-top: 3px;
+		min-height: 8px;
 		width: 100%;
 	}
 	 .dashboard-bar.creates {
